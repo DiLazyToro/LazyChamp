@@ -1,0 +1,180 @@
+/* LazyChamp: every rule is scoped under .lc-root or .lc-overlay so nothing leaks into Showdown. */
+.lc-root {
+  --lc-ink: #1b2030; --lc-raised: #242b3f; --lc-field: #151a28; --lc-line: #38415c;
+  --lc-text: #e8ebf4; --lc-muted: #98a2bd;
+  --lc-std: #8aa4ff; --lc-champ: #3ccfb0; --lc-warn: #f0b84a; --lc-bad: #ef6f6f;
+  container-type: inline-size; container-name: lc;
+  box-sizing: border-box; min-height: 100%; padding: 16px 18px 28px;
+  background: var(--lc-ink); color: var(--lc-text);
+  font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  text-align: left; letter-spacing: normal;
+}
+.lc-root *, .lc-root *::before, .lc-root *::after { box-sizing: border-box; }
+.lc-root [hidden] { display: none !important; }
+
+.lc-root .lc-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin: 0 0 14px; }
+.lc-root .lc-head h2 { margin: 0; padding: 0; font-size: 22px; line-height: 1.2; font-weight: 700; color: var(--lc-text); border: 0; background: none; }
+.lc-root .lc-sub { margin: 0; color: var(--lc-muted); flex: 1 1 14rem; }
+.lc-root .lc-badge { font-size: 12px; color: var(--lc-muted); border: 1px solid var(--lc-line); border-radius: 999px; padding: 1px 10px; white-space: nowrap; }
+.lc-root .lc-badge.live { color: var(--lc-champ); border-color: var(--lc-champ); }
+.lc-root .lc-badge.offline { color: var(--lc-warn); border-color: var(--lc-warn); }
+
+.lc-root .lc-card { background: var(--lc-raised); border: 1px solid var(--lc-line); border-radius: 8px; padding: 14px; margin: 0 0 12px; }
+.lc-root .lc-card > h3 { margin: 0 0 10px; padding: 0; font-size: 15px; font-weight: 650; color: var(--lc-text); border: 0; background: none; }
+
+/* form controls */
+.lc-root input, .lc-root select, .lc-root textarea, .lc-root button {
+  font: inherit; color: var(--lc-text); margin: 0; letter-spacing: normal; text-shadow: none; box-shadow: none;
+}
+.lc-root input[type="text"], .lc-root input[type="search"], .lc-root input[type="number"], .lc-root select, .lc-root textarea {
+  width: 100%; min-height: 34px; padding: 5px 9px; background: var(--lc-field); border: 1px solid var(--lc-line); border-radius: 6px;
+  -webkit-appearance: none; appearance: none;
+}
+.lc-root select { padding-right: 26px; background-image: linear-gradient(45deg, transparent 50%, var(--lc-muted) 50%), linear-gradient(135deg, var(--lc-muted) 50%, transparent 50%); background-position: calc(100% - 15px) 50%, calc(100% - 10px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
+.lc-root textarea { min-height: 96px; resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; }
+.lc-root input:focus-visible, .lc-root select:focus-visible, .lc-root textarea:focus-visible, .lc-root button:focus-visible { outline: 2px solid var(--lc-std); outline-offset: 1px; }
+.lc-root ::placeholder { color: var(--lc-muted); opacity: .8; }
+.lc-root .lc-btn { min-height: 34px; padding: 5px 14px; border-radius: 6px; border: 1px solid var(--lc-line); background: var(--lc-field); cursor: pointer; }
+.lc-root .lc-btn:hover { border-color: var(--lc-muted); }
+.lc-root .lc-btn.primary { background: var(--lc-champ); border-color: var(--lc-champ); color: #0e2a24; font-weight: 650; }
+.lc-root .lc-btn.primary:hover { filter: brightness(1.08); }
+.lc-root label.lc-field { display: flex; flex-direction: column; gap: 3px; font-size: 12.5px; color: var(--lc-muted); min-width: 0; }
+
+/* search */
+.lc-root .lc-search { position: relative; }
+.lc-root .lc-results { position: absolute; z-index: 5; left: 0; right: 0; top: 100%; margin: 4px 0 0; padding: 4px; list-style: none; max-height: 280px; overflow: auto; background: var(--lc-field); border: 1px solid var(--lc-line); border-radius: 8px; }
+.lc-root .lc-results li { padding: 6px 9px; border-radius: 5px; cursor: pointer; display: flex; justify-content: space-between; gap: 10px; }
+.lc-root .lc-results li small { color: var(--lc-muted); }
+.lc-root .lc-results li:hover, .lc-root .lc-results li[aria-selected="true"] { background: var(--lc-raised); }
+.lc-root .lc-species { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.lc-root .lc-species strong { font-size: 18px; }
+.lc-root .lc-chip { font-size: 12px; padding: 1px 9px; border-radius: 999px; border: 1px solid var(--lc-line); color: var(--lc-muted); }
+.lc-root .lc-empty { margin: 12px 0 0; color: var(--lc-muted); }
+
+/* set fields */
+.lc-root .lc-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px 12px; }
+.lc-root .lc-moves { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px 12px; margin-top: 12px; }
+
+/* comparison table */
+.lc-root .lc-grid { display: grid; grid-template-columns: 5.6rem 2.6rem minmax(9rem, 1fr) 4.2rem minmax(9rem, 1fr) 4.2rem; column-gap: 10px; align-items: center; }
+.lc-root .lc-row, .lc-root .lc-headrow { display: contents; }
+.lc-root .lc-headrow > div { padding: 0 0 8px; font-size: 12.5px; color: var(--lc-muted); border-bottom: 1px solid var(--lc-line); }
+.lc-root .lc-headrow .std { color: var(--lc-std); }
+.lc-root .lc-headrow .champ { color: var(--lc-champ); }
+.lc-root .lc-row > div { padding: 7px 0; border-bottom: 1px solid rgba(56, 65, 92, .55); min-width: 0; }
+.lc-root .lc-statname { font-weight: 600; }
+.lc-root .lc-nat { margin-left: 6px; font-size: 11.5px; font-weight: 600; }
+.lc-root .lc-nat.up { color: var(--lc-warn); }
+.lc-root .lc-nat.down { color: var(--lc-bad); }
+.lc-root .lc-base, .lc-root .lc-val { font-variant-numeric: tabular-nums; }
+.lc-root .lc-base { color: var(--lc-muted); }
+.lc-root .lc-val { font-size: 17px; font-weight: 700; text-align: right; padding-right: 2px; }
+.lc-root .lc-val.std { color: var(--lc-std); }
+.lc-root .lc-val.champ { color: var(--lc-champ); }
+.lc-root .lc-ctl { display: flex; align-items: center; gap: 8px; }
+.lc-root .lc-ctl input[type="range"] { flex: 1 1 auto; min-width: 0; margin: 0; height: 20px; }
+.lc-root .lc-ctl input[type="number"] { flex: 0 0 4rem; width: 4rem; text-align: right; font-variant-numeric: tabular-nums; }
+.lc-root .lc-ctl.std input[type="range"] { accent-color: var(--lc-std); }
+.lc-root .lc-ctl.champ input[type="range"] { accent-color: var(--lc-champ); }
+.lc-root .lc-totals { display: flex; flex-wrap: wrap; gap: 6px 28px; margin-top: 12px; font-variant-numeric: tabular-nums; }
+.lc-root .lc-total.std b { color: var(--lc-std); }
+.lc-root .lc-total.champ b { color: var(--lc-champ); }
+.lc-root .lc-total.over { color: var(--lc-bad); }
+.lc-root .lc-total.over b { color: var(--lc-bad); }
+.lc-root .lc-note { margin: 10px 0 0; font-size: 12.5px; color: var(--lc-muted); }
+
+.lc-root .lc-creep-row { margin: 0 0 12px; padding-bottom: 12px; border-bottom: 1px solid var(--lc-line); }
+.lc-root .lc-switch { display: inline-flex; align-items: center; gap: 9px; cursor: pointer; font-weight: 600; }
+.lc-root .lc-switch input { width: 17px; height: 17px; margin: 0; accent-color: var(--lc-champ); cursor: pointer; }
+.lc-root .lc-creep-row .lc-note { margin-top: 6px; }
+.lc-root .lc-creep { margin: 12px 0 0; padding: 9px 12px; border-left: 3px solid var(--lc-champ); background: rgba(60, 207, 176, .08); border-radius: 0 6px 6px 0; font-size: 13px; color: var(--lc-text); }
+
+/* import / export */
+.lc-root .lc-io { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.lc-root .lc-io h4 { margin: 0 0 6px; padding: 0; font-size: 13.5px; font-weight: 650; border: 0; background: none; }
+.lc-root .lc-io h4.std { color: var(--lc-std); }
+.lc-root .lc-io h4.champ { color: var(--lc-champ); }
+.lc-root .lc-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.lc-root .lc-status { min-height: 1.4em; margin: 4px 2px 0; font-size: 13px; color: var(--lc-muted); }
+.lc-root .lc-status.warn { color: var(--lc-warn); }
+.lc-root .lc-status.ok { color: var(--lc-champ); }
+
+/* set text + copy under each side of the calculator */
+.lc-root .lc-outs { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.lc-root .lc-out { min-width: 0; padding: 10px 12px 12px; border: 1px solid var(--lc-line); border-radius: 8px; background: var(--lc-field); }
+.lc-root .lc-out.std { border-top: 3px solid var(--lc-std); }
+.lc-root .lc-out.champ { border-top: 3px solid var(--lc-champ); }
+.lc-root .lc-out-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.lc-root .lc-out-body { margin-top: 10px; }
+.lc-root .lc-paste { margin: 0 0 10px; padding: 10px 12px; max-height: 260px; overflow: auto; white-space: pre-wrap; word-break: break-word; background: var(--lc-ink); border: 1px solid var(--lc-line); border-radius: 6px; color: var(--lc-text); font: 12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+/* whole-team conversion */
+.lc-root .lc-team-format { max-width: 340px; margin-bottom: 10px; }
+.lc-root .lc-team-text { min-height: 170px; }
+.lc-root .lc-team-out { min-height: 150px; }
+.lc-root .lc-warnbox { margin-top: 12px; padding: 12px 14px; border: 1px solid var(--lc-warn); border-left-width: 4px; border-radius: 6px; background: rgba(240, 184, 74, .08); }
+.lc-root .lc-warnbox strong { color: var(--lc-warn); }
+.lc-root .lc-warnbox p { margin: 6px 0 12px; font-size: 13px; }
+.lc-root .lc-issues { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+.lc-root .lc-issues li { padding: 7px 10px; border-left: 3px solid var(--lc-line); border-radius: 0 6px 6px 0; background: var(--lc-field); font-size: 13px; }
+.lc-root .lc-issues li.bad { border-left-color: var(--lc-bad); }
+.lc-root .lc-issues li.warn { border-left-color: var(--lc-warn); }
+.lc-root .lc-issues li.note { border-left-color: var(--lc-champ); color: var(--lc-muted); }
+.lc-root .lc-result { margin-top: 14px; }
+.lc-root .lc-result h4 { margin: 0 0 6px; padding: 0; font-size: 13.5px; font-weight: 650; border: 0; background: none; }
+
+/* narrow panels: each stat becomes a small card */
+@container lc (max-width: 600px) {
+  .lc-root .lc-fields > label:first-child { grid-column: 1 / -1; }
+  .lc-root .lc-grid { grid-template-columns: 1fr; }
+  .lc-root .lc-headrow { display: none; }
+  .lc-root .lc-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 12px; padding: 10px 0; border-bottom: 1px solid var(--lc-line); }
+  .lc-root .lc-row > div { border: 0; padding: 0; }
+  .lc-root .lc-row .lc-statname { grid-column: 1 / 2; }
+  .lc-root .lc-row .lc-base { grid-column: 2 / 3; text-align: right; }
+  .lc-root .lc-row .lc-base::before { content: "Base "; }
+  .lc-root .lc-row .lc-ctl { grid-column: 1 / -1; }
+  .lc-root .lc-row .lc-val { text-align: left; font-size: 15px; }
+  .lc-root .lc-row .lc-val.std::before { content: "Showdown stat  "; font-weight: 400; font-size: 12.5px; color: var(--lc-muted); }
+  .lc-root .lc-row .lc-val.champ::before { content: "Champions stat  "; font-weight: 400; font-size: 12.5px; color: var(--lc-muted); }
+  .lc-root .lc-row .lc-evctl { order: 3; }
+  .lc-root .lc-row .lc-stdval { order: 4; }
+  .lc-root .lc-row .lc-ptctl { order: 5; }
+  .lc-root .lc-row .lc-champval { order: 6; }
+}
+
+/* fallback overlay (used when the Showdown tab API is not available) */
+.lc-overlay { position: fixed; inset: 0; z-index: 2147483000; display: flex; align-items: flex-start; justify-content: center; padding: 3vh 12px; background: rgba(8, 10, 18, .72); overflow: auto; }
+.lc-overlay .lc-overlay-card { position: relative; width: min(900px, 100%); border-radius: 10px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, .5); background: #1b2030; }
+.lc-overlay .lc-close { position: absolute; top: 12px; right: 14px; z-index: 6; min-height: 32px; padding: 4px 14px; border-radius: 6px; border: 1px solid #38415c; background: #151a28; color: #e8ebf4; font: 600 13px system-ui, sans-serif; cursor: pointer; }
+.lc-overlay .lc-close:focus-visible { outline: 2px solid #8aa4ff; outline-offset: 1px; }
+
+/* ---- team buttons, notice and settings (injected into Showdown's own pages, so no .lc-root ancestor) ---- */
+.lc-inject { display: inline-block; white-space: nowrap; vertical-align: top; }
+.lc-notice { display: block; box-sizing: border-box; max-width: 660px; margin: 10px 0 4px; padding: 9px 12px; border-left: 4px solid #8aa4ff; border-radius: 0 6px 6px 0; background: #1b2030; color: #e8ebf4; font: 13px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; text-align: left; white-space: normal; }
+.lc-notice[hidden] { display: none; }
+.lc-notice.ok { border-left-color: #3ccfb0; }
+.lc-notice.warn { border-left-color: #f0b84a; }
+.lc-notice.bad { border-left-color: #ef6f6f; }
+.lc-notice-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 14px; }
+.lc-notice-actions { display: inline-flex; gap: 6px; }
+.lc-notice-btn { cursor: pointer; min-height: 26px; padding: 2px 11px; border: 1px solid #38415c; border-radius: 5px; background: #151a28; color: #e8ebf4; font: inherit; }
+.lc-notice-btn:hover { border-color: #98a2bd; }
+.lc-notice ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; }
+.lc-notice li { padding-left: 9px; border-left: 3px solid #38415c; }
+.lc-notice li.bad { border-left-color: #ef6f6f; }
+.lc-notice li.warn { border-left-color: #f0b84a; }
+.lc-notice li.note { border-left-color: #3ccfb0; color: #98a2bd; }
+.lc-notice-more { margin: 6px 0 0; color: #98a2bd; }
+
+.lc-config { box-sizing: border-box; padding: 12px 14px; border: 1px solid #38415c; border-radius: 8px; background: #1b2030; color: #e8ebf4; font: 13px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; text-align: left; }
+.lc-config h4 { margin: 0 0 10px; padding: 0; border: 0; background: none; color: #e8ebf4; font-size: 14px; font-weight: 650; }
+.lc-config-field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; color: #98a2bd; }
+.lc-config select { box-sizing: border-box; width: 100%; min-height: 32px; padding: 4px 8px; border: 1px solid #38415c; border-radius: 6px; background: #151a28; color: #e8ebf4; font: inherit; }
+.lc-config select:focus-visible, .lc-config input:focus-visible { outline: 2px solid #8aa4ff; outline-offset: 1px; }
+.lc-config-switch { display: flex; align-items: center; gap: 8px; margin: 10px 0 2px; font-weight: 600; cursor: pointer; }
+.lc-config-switch input { width: 17px; height: 17px; margin: 0; accent-color: #3ccfb0; cursor: pointer; }
+.lc-config-help { margin: 6px 0 0; color: #98a2bd; font-size: 12.5px; }
+.lc-config-warn { margin: 6px 0 0; color: #f0b84a; }
+.lc-config-warn[hidden] { display: none; }
+.lc-cfgbox { position: fixed; z-index: 2147483000; width: 330px; box-shadow: 0 8px 30px rgba(0, 0, 0, .5); }
