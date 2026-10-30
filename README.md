@@ -128,9 +128,9 @@ Installation links will be added here when the public store listings are availab
 
 ## Data and privacy
 
-LazyChamp uses Pokémon Showdown's own `/data/pokedex.json` data, with a bundled copy available as a backup. The only network request described by the project is a same-site download of that Showdown data.
+LazyChamp uses Pokémon Showdown's own `/data/pokedex.json` data, with a bundled copy available as a backup. It requests that data from the same Pokémon Showdown site where the extension is running.
 
-The extension remembers the selected conversion format and Speed Creep Assumption setting in this browser using two `localStorage` values. It does not store other settings or team data for this purpose.
+LazyChamp remembers the selected conversion format and Speed Creep Assumption setting in this browser using two `localStorage` values. It does not send team contents to an external service. When you choose **Convert to Champions**, the extension updates the team you are actively editing through Pokémon Showdown's team-management mechanisms; this is an intentional feature, not a background change. The Team Builder also provides an **Undo** option after conversion (available until the page is reloaded).
 
 ## License
 
