@@ -1,86 +1,137 @@
 # LazyChamp
 
-**A Pokémon Showdown extension for converting teams between traditional Pokémon formats and Pokémon Champions formats.**
+**A browser extension for Pokémon Showdown that converts Pokémon sets and teams between regular Showdown formats and Pokémon Champions formats.**
 
-LazyChamp makes adapting your existing competitive teams to Pokémon Champions easier by automatically converting EVs into Champions Points, helping preserve important Speed benchmarks, and integrating directly into Pokémon Showdown's Team Builder.
-
-## What is LazyChamp?
-
-Pokémon Champions uses a different stat distribution system from traditional Pokémon formats. Instead of EVs, it uses Champions Points.
-
-Simply changing a team's format in Pokémon Showdown can result in incorrect stat allocations and validation errors.
-
-LazyChamp solves this problem by automatically converting your Pokémon's EVs into Champions Points, while providing additional tools to preserve important stat benchmarks and simplify team conversion.
+LazyChamp compares regular Showdown EV spreads with Pokémon Champions stat points, side by side. It can import and export sets in Showdown paste format, convert entire teams, help preserve Speed benchmarks, and integrate directly into Pokémon Showdown's Team Builder.
 
 ## Features
 
-### 1. Individual Pokémon Conversion
+### Individual Pokémon calculator
 
-Import an existing Pokémon set or create one from scratch.
+- Search for a Pokémon or paste a set under **Import a set**.
+- Adjust an EV slider and the corresponding Champions Points update automatically, or adjust the points and see the EV value update.
+- Both sides display the resulting stat.
+- Once a set exists, two output blocks appear below the table: **Show Showdown set** and **Show Champions set**. Both are enabled by default and include a copy button. Either block can be switched off to save space.
+- **Import set** on the Champions side converts a regular EV paste (including values above 32) into Champions Points. A line beginning with `SPs:` is always interpreted as points.
 
-LazyChamp supports two import formats:
+### Convert a whole team
 
-- **Showdown Format:** Standard EVs, Level 100.
-- **Champions Format:** Champions Points, Level 50.
+At the bottom of the panel, choose the **Import team format**, paste a team, and use the corresponding conversion button.
 
-Once imported, LazyChamp automatically converts the Pokémon's EV distribution into the corresponding Champions Points allocation.
+- **Regular Showdown 510 EVs** → **Convert Showdown → Champions**. Each Pokémon must have no more than 252 EVs in any stat and 510 EVs total.
+- **Champions 66 Points** → **Convert Champions → Showdown**. Each Pokémon must have no more than 32 points in any stat and 66 points total.
 
-### 2. Speed Creep Assistance
+For Showdown-to-Champions conversion, the output keeps names, items, abilities, natures, and moves, adds `Level: 50`, and removes `IVs:` lines because Champions fixes IVs at 31. Any IV value other than 31 is reported.
 
-One of LazyChamp's most useful features is its **Speed Creep Assumption**.
+For Champions-to-Showdown conversion, a `Level:` line is ignored because Champions points always represent level 50; the output has no Level line.
 
-When converting a Pokémon to Level 50, certain Speed benchmarks may be lost due to stat rounding. This can cause your Pokémon to tie with, or become slower than, Pokémon you originally intended to outspeed.
+If any Pokémon is invalid, the team is not converted. Each problem is listed by Pokémon number and name.
 
-LazyChamp analyzes your Pokémon's original Speed stat, identifies relevant Speed benchmarks, and can automatically allocate an additional Champions Point to preserve your Speed advantage whenever possible.
+Some results produce warnings without blocking conversion:
 
-It also provides an analysis explaining which Pokémon your set can outspeed and whether your intended benchmark can still be achieved.
+- A converted result that needs more than 66 Champions Points.
+- Exact Champions stats that require more than 510 EVs in regular Showdown (for example, 32/32/2 points requires 516 EVs).
 
-### 3. Full Team Conversion
+LazyChamp does not silently trim stat allocations. If Speed Creep Assumption is off during Showdown-to-Champions conversion, a warning explains the option and lets you choose **Continue** with it enabled or **Continue anyway** without it.
 
-Convert an entire team at once instead of processing Pokémon individually.
+Use **Copy converted team** to copy the result.
 
-Simply paste your team into the conversion box and choose one of the available conversion options:
+### Convert the team you're editing in Pokémon Showdown
 
-- **Regular Showdown 510 EVs:** Converts a traditional team into the corresponding Pokémon Champions format.
-- **Champions 66 Points:** Converts a Champions team back into a format using the 66-point distribution.
+LazyChamp integrates with Pokémon Showdown's Team Builder and adds controls beside **Add Pokémon** in the team being edited:
 
-LazyChamp processes the entire team, adjusts the stat allocations, and provides a Speed Creep analysis for the relevant Pokémon.
+- In the new client, the controls appear in the **Team** tab.
+- In the classic client, they appear in the team's Teambuilder view.
 
-You can then copy the converted team directly into Pokémon Showdown.
+**Convert to Champions** converts the current team only. It switches the team's format and rewrites each Pokémon using the calculator's conversion logic: EVs become Champions Points, the level becomes 50, IV lines are removed, and Speed Creep Assumption is applied if enabled. Nickname, gender, item, ability, nature, moves, and other set details are kept.
 
-### 4. Pokémon Showdown Integration
+If the team cannot be converted—for example, because it has more than 510 EVs, contains an unknown Pokémon, is read-only, or the target format is missing from Showdown's format list—nothing is changed and the reason is displayed.
 
-LazyChamp also integrates directly into Pokémon Showdown's Team Builder.
+The **settings (cog) button** opens the conversion settings. You can choose the target format:
 
-It adds two conversion buttons that allow you to convert your current team without manually copying and pasting it into the extension.
+- **[Champions] Draft**
+- **[Champions] NatDex Draft**
 
-Before converting, you can enable or disable Speed Creep Assumption depending on whether you want to preserve your Speed benchmarks.
+You can also enable or disable Speed Creep Assumption. This is the same setting used by the LazyChamp calculator.
 
-Once converted, your team will automatically switch to the appropriate Champions format, with its EVs replaced by the corresponding Champions Points.
+After conversion, a notice below the controls describes what was converted, lists warnings, and offers **Undo**. Undo remains available until the page is reloaded.
 
-And if you change your mind, you can simply use the undo function to restore your previous team.
+The teams that receive these controls are determined from Pokémon Showdown's own format data (`Dex.formats`), which LazyChamp reads each time:
 
-## Getting Started
+- Shown for generation 3 and newer formats, and for a team with no format selected.
+- Hidden for generation 1 and 2 formats, including OMs running on a generation 1 or 2 mod.
+- Hidden for Let's Go formats (which do not use EVs) and for teams already using a Champions format.
 
-After installing LazyChamp, simply open Pokémon Showdown's Team Builder.
+LazyChamp intentionally does not remove Pokémon, moves, items, or abilities that the Champions format does not allow. They are kept as they are; use Showdown's own **Validate** feature to see what needs fixing.
 
-The extension automatically appears and remains available while you're using the Team Builder, even when switching between tabs.
+### Speed Creep Assumption
 
-You can use it to:
+Level 50 stat rounding can cause a converted Pokémon to tie with something it outsped in the original format. When Speed Creep Assumption is enabled, each Speed conversion:
 
-- Convert individual Pokémon.
-- Process entire teams.
-- Directly convert your existing Showdown teams with just a couple of clicks.
+1. Takes the Pokémon's Speed in the source format (for example, 380 at level 100).
+2. Finds the Pokémon with the highest maximum Speed that is still below that value. Maximum Speed means 252 EVs or 32 points, a +Speed nature, and 31 IVs. If a Pokémon has a maximum Speed exactly one point below yours, that is the benchmark (for example, 379 for Meowscarada).
+3. Ensures the converted Speed still beats that Pokémon's maximum Speed at the destination level (for example, 192 at level 50 means the converted Pokémon needs 193), using the fewest additional points or EVs possible.
 
-## Browser Compatibility
+This works in both directions: Showdown to Champions and Champions to Showdown. It is applied during conversions, including when editing EVs or points, changing the nature, or importing a set. Changing the Showdown level box by itself does not trigger a conversion.
 
-LazyChamp has dedicated versions for:
+Your nature is never changed, and Speed is the only stat adjusted by this assumption. A note below the table explains what happened. The setting and selected conversion format are remembered in this browser using two `localStorage` values; no other settings or team data are stored by this feature.
+
+## How the numbers work
+
+Champions stats use level 50, 31 IVs, and 0–32 points per stat, with a total of 66 points.
+
+A Showdown EV spread is displayed at the selected level (level 100 by default). Linked values show the fewest points or EVs needed to produce the same level 50 stat.
+
+The formulas are tested against a port of Pokémon Showdown's own `getStat` function across every Pokémon, nature multiplier, and point value (728,112 combinations). Run the test with:
+
+```sh
+node tests/core.test.js
+```
+
+## Pokémon Showdown clients
+
+LazyChamp detects both Pokémon Showdown clients:
+
+- New client
+- Classic client
+
+The detected client is available as `window.LazyChamp.client` (`"new"` or `"classic"`) and is also written to the page's `<html>` element as `data-lazychamp-client`.
+
+The LazyChamp tab opens automatically in a secondary position when the Teambuilder is opened, and takes focus when it is created:
+
+- **New client:** a right-hand panel next to Hellodex.
+- **Classic client:** a side tab.
+
+It closes only when the Teambuilder and every **Team** tab are closed. Team tabs (one per team being edited) exist only in the new client.
+
+Switching to another side tab is respected. LazyChamp takes focus again only after everything has been closed and the Teambuilder is opened again. If you close LazyChamp manually, it stays closed until then; the toolbar icon can open it at any time.
+
+If neither client is recognised, the toolbar icon opens LazyChamp as a floating window. Press **Esc** to close it.
+
+## Browser compatibility
+
+LazyChamp has dedicated extension versions for:
 
 - Mozilla Firefox
 - Chromium-based browsers
 
-Installation links and additional instructions will be added here once the public releases are available.
+Installation links will be added here when the public store listings are available.
 
----
+## Known limits and testing
 
-**LazyChamp makes adapting your existing competitive teams to Pokémon Champions simpler, faster, and less prone to stat-distribution mistakes.**
+- The extension has been tested in headless Chromium against mock Pokémon Showdown pages for the new and classic clients. The new-client mock uses the real Preact library. It has not yet been run against the live site, in Firefox, or alongside Showdex.
+- Team tabs are recognised by their room IDs (`team-...`) in the client source. If Showdown changes those IDs, that rule may need updating.
+- Base stats come from Showdown's `pokedex.json`. Changes to Champions base stats in a separate data file are not picked up.
+- Battle-only formes are hidden from search because Showdown rejects them in teams.
+- Speed-creep benchmarks are drawn from every Pokémon in the Pokédex data (including Mega Evolutions), not from a format's legal Pokémon list.
+- The Team Builder controls have been tested against mock editors that reproduce the clients' structure, using simplified stand-ins for Showdown's own `Teams` import/export code. Check a converted team with Showdown's **Validate** feature.
+
+## Data and privacy
+
+LazyChamp uses Pokémon Showdown's own `/data/pokedex.json` data, with a bundled copy available as a backup. The only network request described by the project is a same-site download of that Showdown data.
+
+The extension remembers the selected conversion format and Speed Creep Assumption setting in this browser using two `localStorage` values. It does not store other settings or team data for this purpose.
+
+## License
+
+AGPL-3.0, the same license used by Pokémon Showdown and Showdex. See [LICENSE](LICENSE). The formula test includes a short port of Pokémon Showdown's `getStat` function.
