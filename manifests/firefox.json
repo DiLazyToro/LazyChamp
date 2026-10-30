@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "LazyChamp",
   "version": "0.4.0",
-  "description": "Compare Showdown EV spreads with Pokémon Champions stat points in a tab. Read-only: it never edits your teams.",
+  "description": "Compare Showdown EV spreads with Pokémon Champions stat points, convert teams, and use LazyChamp directly in the Pokémon Showdown Team Builder.",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
