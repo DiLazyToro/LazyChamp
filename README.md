@@ -134,4 +134,4 @@ LazyChamp remembers the selected conversion format and Speed Creep Assumption se
 
 ## License
 
-AGPL-3.0, the same license used by Pokémon Showdown and Showdex. See [LICENSE](LICENSE). The formula test includes a short port of Pokémon Showdown's `getStat` function.
+AGPL-3.0, the same license used by Pokémon Showdown. See [LICENSE](LICENSE). The formula test includes a short port of Pokémon Showdown's `getStat` function.
