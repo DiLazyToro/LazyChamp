@@ -1,6 +1,6 @@
 /**
  * LazyChamp panel. Runs inside the Pokemon Showdown page (injected by content.js).
- * Read-only by design: it never reads or writes your teams or any Showdown setting.
+ * Provides a calculator and optional team-conversion controls for the Showdown Team Builder.
  * Works on both Showdown clients:
  *   - new client (Preact panels): a tab in the right-hand panel, next to Hellodex
  *   - classic client (Backbone): a side-room tab
